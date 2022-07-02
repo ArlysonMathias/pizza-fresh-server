@@ -10,7 +10,7 @@ import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductService {
-  products: Product[] = [];
+  // products: Product[] = []; Db em memoria
 
   constructor(private readonly prisma: PrismaService) {}
 
