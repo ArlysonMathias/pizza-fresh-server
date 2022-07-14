@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { userInfo } from 'os';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -21,16 +20,87 @@ export class OrderService {
           number: dto.tableNumber,
         },
       },
+      products: {
+        connect: dto.products.map((productId) => ({
+          id: productId,
+        })),
+      },
     };
 
-    return this.prisma.order.create({ data }).catch(handleError);
+    return this.prisma.order
+      .create({
+        data,
+        select: {
+          id: true,
+          table: {
+            select: {
+              number: true,
+            },
+          },
+          products: {
+            select: {
+              name: true,
+            },
+          },
+          user: {
+            select: {
+              name: true,
+            },
+          },
+          createdAt: true,
+        },
+      })
+      .catch(handleError);
   }
 
   findAll() {
-    return `This action returns all order`;
+    return this.prisma.order.findMany({
+      select: {
+        id: true,
+        table: {
+          select: {
+            number: true,
+          },
+        },
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        createdAt: true,
+      },
+    });
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} order`;
+    return this.prisma.order.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        table: {
+          select: {
+            number: true,
+          },
+        },
+        products: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            image: true,
+            description: true,
+          },
+        },
+      },
+    });
   }
 }
