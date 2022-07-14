@@ -1,9 +1,6 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateTableDto } from './dto/create.table.dto';
 import { UpdateTableDto } from './dto/update.table.dto';
 import { Table } from './entities/table.entity';
@@ -36,23 +33,21 @@ export class TableService {
 
   async create(createTableDto: CreateTableDto): Promise<Table> {
     const data = { ...createTableDto };
-    try {
-      return await this.prisma.table.create({ data });
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.prisma.table.create({ data }).catch(handleError);
   }
 
   async update(id: string, dto: UpdateTableDto): Promise<Table> {
     await this.findById(id);
     const data: Partial<Table> = { ...dto };
 
-    return this.prisma.table.update({
-      where: {
-        id,
-      },
-      data,
-    });
+    return this.prisma.table
+      .update({
+        where: {
+          id,
+        },
+        data,
+      })
+      .catch(handleError);
   }
 
   async delete(id: string) {
@@ -60,14 +55,5 @@ export class TableService {
     await this.prisma.table.delete({
       where: { id },
     });
-  }
-
-  handleError(error: Error): undefined {
-    const errorLines = error.message?.split('\n');
-    const lastErrorLine = errorLines[errorLines.length - 1]?.trim();
-
-    throw new UnprocessableEntityException(
-      lastErrorLine || 'Algum erro ocorreu ao executar a operação',
-    );
   }
 }
