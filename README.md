@@ -1,14 +1,22 @@
+# Pizza-Fresh API
+
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este é uma projeto de uma api para uma pizzaria, desenvolvido com fins educacionais.
 
-## Installation
+## Instalação
 
-```bash
-$ npm install
-```
+  * Clone o projeto em sua máquina utilizando o comando abaixo:
 
-## Running the app
+    git clone gh repo clone ArlysonMathias/pizza-fresh-server
+
+  * Acesse a pasta do projeto seu terminal:
+    cd [nome da pasta]
+
+  * Dentro da pasta digite
+    npm install
+
+## Executando a aplicação
 
 ```bash
 # development
@@ -20,11 +28,6 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
